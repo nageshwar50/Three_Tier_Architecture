@@ -1,7 +1,6 @@
 # Architecture of the Project
 
 ![AWS Cloud](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/60d8ffd5-380b-47a5-83e6-2f1fc9aa1a19)
-
 # A Step-By-Step Guide
 ## VPC
 firstly we are going to set up VPC in both US East (N. Virginia). The below image contained all the subnets, their IP range, and their uses.
