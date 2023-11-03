@@ -1,5 +1,4 @@
 # Architecture of the Project
-
 ![AWS Cloud](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/60d8ffd5-380b-47a5-83e6-2f1fc9aa1a19)
 # A Step-By-Step Guide
 ## VPC
@@ -7,7 +6,6 @@ firstly we are going to set up VPC in both US East (N. Virginia). The below imag
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/5d39c375-c659-42e6-95c9-12621cd793ec)
 
 Please log in to your AWS Account and type VPC in the AWS console. and click on VPC service. Click on Your VPC's button on the left and then click on Create VPC the button on the top right corner of the page and give please enter the name that you want to keep and the IPV4 CIDR block. in my case CIDE block is 172.20.0.0/16
-
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/574e56f2-45ed-4cce-909f-94c26131c9a6)
 
 ## Subnet
