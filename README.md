@@ -61,6 +61,7 @@ Please go to the subnet page and select the public subnet and click on the actio
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/828face9-2ccf-434a-afec-2ed022393fa0)
 Here you have to mark right on Enable public assign public IPV4 address. And then click on the save button.
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/473b5afe-e3a5-4428-a11f-774b2ead769c)
+![Screenshot from 2023-11-04 11-38-32](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9d2adf37-0de4-4105-ba2a-e33c1274bedd)
 
 And here we are done with VPC configuration in the primary region. In my case us-east-1 (N.Virginia). I hope you did the setup. Now let’s move ahead...
 
