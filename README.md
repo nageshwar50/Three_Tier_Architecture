@@ -205,19 +205,36 @@ ssh -i <name_of_key>.pem ubuntu@<Public_IP_add_of_Instance> like
 
 Now you are successfully logged your remote temp-frontend-server. now our first task is to clone my git repo. If you are working on your own project then clone your repo. So type the command in the terminal.
 
+after done ssh clone this repo
 
+git clone https://github.com/nageshwar50/Three-tier_code.git
+cd Three-tier_code/client 
 
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/dadaf980-ba02-40c0-8378-640db2fae032)
 
+Now, we need to change just one line in our frontend application that is built in React. So type the command
+vi src/pages/config.js
+The above command opens the file in a text editor. Now press I the button on your keyboard to edit the file. In this file, we have to change API_BASE_URL. So remove whatever is present in the API_BASE_URL variable.remove this IP
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/87885e8e-068f-49e2-8781-aa27c9a62798)
 
+And add https://api.nageshwarpandey.co.in, In my case I have added this URL but in your case it is different. This means you need to use your OWN domain name. so your API_BASE_URL should be like https://api.<YOUR_DOMAIN_NAME>.XYZ I hope it makes sense.  After updating the variable press ESC key on your keyboard and then type :wq and hit the Enter button.
+After making these changes our frontend of the application will send all the API calls on the domain name https://api.nageshwarpandey.co.in And lastly, that will point to our backend server.
+Now type the command npm install in the terminal to install all the required packages. < npm install  >
+Type the command npm run build to create the optimize static pages. < npm run build > 
 
+Now you have one more folder in the directory called build. You can verify that by tying ls command
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/cd242e50-d128-43aa-981d-74729665d42e)
 
+Now type the very essential command sudo cp -r build/* /var/ww/html/
 
-
-
-
-
-
-
+sudo cp -r build/* /var/www/html
+The above command takes all the static files from the build folder and stores them in /var/www/html so that Apache can serve them.
+Here our temp-frontend-server configuration is completed. Now let's set up the temp-backend-server. So select the temp-backend-server and copy the IP address of the instance.  Again please open Git bash in the same directory where your stored key.pem file. And type the below command.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/81a0df07-b919-40e6-a7ff-8591e15b7de0)
+We are successfully logged in inside the backend server. first, we will clone the repo
+git clone  https://github.com/nageshwar50/Three-tier_code.git
+go inside the Three-tier_code/backend
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/d32f1db6-ca00-417e-8368-9d6a3fa1f736)
 
 
 
