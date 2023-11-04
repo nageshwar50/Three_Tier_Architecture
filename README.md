@@ -394,6 +394,7 @@ copy your fronted load blancer hit on browser
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/eefa6602-390e-4b46-8248-d4e2b719327a)
 
 
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/be228f56-3cda-4386-aa09-45255be68745)
 
 
 
