@@ -261,6 +261,73 @@ git clone  https://github.com/nageshwar50/Three-tier_code.git
 go inside the Three-tier_code/backend
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/d32f1db6-ca00-417e-8368-9d6a3fa1f736)
 
+vi .env
+Press the I button on your keyboard. And copy the code given below and paste the snippet into the code editor. This code contains information about the RDS instance. Please change your username and password according to whatever you kept while creating a database. And then click on the  ESC button and type :wq and hit the enter button.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/c1fa4420-57d2-4a22-85cd-7622ee0257b0)
+Now type the below commands in terminal
+
+npm install 
+npm install dotenv
+
+Now, let's start the backend server.  ( very IMP )
+
+sudo pm2 start index.js --name "backendApi"
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/690652f8-cd36-48e3-a3c3-22926df3242b)
+Yeah!!!😃 Successfully completed our backend server configuration. You can close the terminal
+
+But before we end this section we need to do a few more steps. We have to create Machine images of these servers so that we can create a launch template. these steps are optional because anyhow we will take a backup from the AWS backup service and that will do the same thing. but that takes time. so it would be better if you follow the steps.
+
+So please select temp-frontend-server and click on the Action button in the top right corner. One drop-down menu will open. You have to select the images and template option and that will give one more drop-down menu from which we need to click on create image button.Give the name you your image (img-frontend-server). just deselect that delete on the termination button and click on the create image button.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/643b9d7b-63df-43f3-99e1-6ca6cea68f4f)
+
+You have to do the same thing for the temp-backend-server as well. I have shown you each and every step in the below images.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/8ee2336f-1742-427a-98ec-966cf2c9927f)
+
+After a couple of minutes (10-15) you can see those images. Click on the AMIs button on the left panel and you can see both images here. its right now in pending state 
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/23251ab6-bf79-492c-8722-bae340c28387)
+
+##  Launch Template 
+Take note that we need to create a launch template. So click on the launch template button on the left panel and click on the create launch template button.
+Give the name to your launch template such as template-frontend-server as we are creating a launch template for frontend-server. let's give the version 1 in the version field. Here we need to select AMI so click on My AMIs tab and select the option owned by me. So now it will show you all the images that are present in your current region.  If you are following the blog from starting then you will have a total of 4 images in N.virginia. coz two we created manually and two were created by backup service.  Here you have to select the image that contains the frontend application. Either you can select the manual or the one created by the backup service. both are okay coz it contains the same data. Select instance type t2.micro
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/3b4ae5f0-986f-4324-aaaa-7578f752adec)
+Scroll down, attach the key pair, and in the network setting just select the security group that we created for the frontend server. in my case the name SG is frontend-sg.  And click on the advance details section at the bottom of the page.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/e5bac00b-0176-4be0-aa39-6589ff3a1763)
+Scroll down to the bottom, and in the USER-DATA text box paste the code that I have given below. And then click on the Create launch template button.
+#!/bin/bash
+
+sudo apt update -y
+
+sleep 90
+
+sudo systemctl start apache2.service 
+we successfully created a launch template for the frontend-server. now let's create a launch template for the backend server.
+
+Give a name to your launch template (template-backend-server). Give version 1 in the version field, but make you select the correct AMIt that holding your backend application.  And Select an instance type t2.micro
+
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/ac1de6be-1cc5-4074-b303-a15c6a70a816)
+ userdata
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/e65f4f47-41dd-4545-98bd-e188821b957a)
+
+We have created two launch templates, template-frontend-server and template-backend-server
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/dd34d9b8-bd79-4694-9cc0-18da39f4a75d)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
