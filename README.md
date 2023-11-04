@@ -111,7 +111,109 @@ Scroll down, mark on enable encryption checkbox to make the database bit more se
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/3f552b61-dc2f-437a-b85a-221ef13fc6fc)
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9200ac99-06e3-4ad7-af75-ba296632b1dd)
 
-Note: RDS take 15-20 minute because it creates a database and then take a snapshot. So please have patience and wait for it to be ready
+## Note:
+RDS take 15-20 minute because it creates a database and then take a snapshot. So please have patience and wait for it to be ready
+After your database is completely ready and you see the status Available then select the database and click on the Action button. There you can see the drop-down list. Please click on created read-replica.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/08afcf70-ae5f-4565-8d49-fc0628f96c47)
+
+This page is similar to creating a database. In the AWS region select the region where you want to create the read replica. In my case, It is Oregon (us-west-2).  Give a name to your read replica, and select all the necessary configurations that we did before while creating the database. For your reference, I have shown everything in the below images.
+
+This page is similar to creating a database. In the AWS region select the region where you want to create the read replica. In my case, It is US East (N. Virginia) us-east-1.  Give a name to your read replica, and select all the necessary configurations that we did before while creating the database. For your reference, I have shown everything in the below images. You can check your read replica on the specified region’s RDS dashboard
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/2bd1fa75-2a1a-4c6d-bd39-4a1d7df42fcd)
+## Note:
+we can’t write anything into a read replica. It is just read-only database. So when a disaster happens we just have to promote read replica so that it becomes the primary database in that region.
+
+
+## Route 53
+Now we are going to utilize route 53 service and create two private hosted zone.  for north Virginia(us-east-1 Firstly, we are gonna create a hosted zone for us-east-1. Click on the Hosted Zones button on the left panel and click on the created hosted zone button on the top right corner.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/f569d641-1405-46b9-a012-db63ec036d00)
+
+Give any domain name because anyhow it will be private hosted zone but it would be great if you give the name same as mine (rds.com). Please select the private hosted zone and Select the region. In my case, it is us-east-1. And then select VPC ID. Make sure you select VPC that we created earlier. Because this hosted zone will resolve the record only in specified VPC.  and then click on the Create hosted zone
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/7a7c7e64-9319-44c3-8403-6767ec046712)
+
+Click on the defined record button in the middle of the box.Here type book in the record name field. In the record type select CNAME. In the value field paste endpoint of the RDS which is in us-east-1. Then click on the defined record button.After successfully completing the above steps your Route 53 console look like this.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/403945c5-acaf-42ed-acb8-fc0195536c29)
+
+
+## Certificate Manager
+
+I have the domain name nageshwarpandey.co.in in Route 53. Now I am going to use this domain name to create subdomains such as api.nageshwarpandey.co.in  and that will resolve ALB-backend DNS. Furthermore, we need an SSL certificate so that we can make the connection secure.
+
+## Note: 
+I have wildcard  certificates
+## Application Load balancer(ALB) and Route 53
+Now it’s time to set up an Application load balancer. We need two load balancers, one point to the backend server, and another point to the frontend server.
+Note: before we created ALB we need to create a Target group(TG). So first we will create TG for ALB-frontend and then create TG for ALB-backend.
+
+Type ec2 in the AWS console. and click on the EC2 service.Click the target group button on the bottom of the left panel. And click on the create target group button in the middle of the page.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/b140963c-3ad0-4771-bbdb-2bbb57fa90d5)
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/432501f1-c36d-4db3-a0b3-20f619680915)
+Click on the create target group button.
+
+Let's create TG for ALB-backend. Click on the create target group button. Select the target type Instance. Again give some meaning full name such as ALB-backend-TG. Select VPC that we have created and after that we can see that we have two TG. ALB-frontend-TG and ALB-backend-TG.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/587e3a4a-97a9-4087-ba16-700caf6e1aec)
+
+Now let's associate these TG with the load balancer. So click on the Load Balancer button at the bottom of the left panel and click on the create load balancer button. First, we will create ALB for frontend.
+Choose Application load balancer and click on create button.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/ea115a7d-31a4-4f62-bd88-1dd41625d3e0)
+here we can configure our ALB. First, give the relevant name to ALB such as ALB-frontend. Select the internet-facing option. In Network mapping select VPC that we have created. Select both availability zone us-east-1a and us-east-2b. and select subnet pubsub-1a and mypubsub-2b respectively Scroll down and click on the create load balancer button.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/c64036e1-1999-42bb-9570-084aabf761f7)
+
+Now, lets create ALB for backend. Again choose Application  load balncer option and click on the create button.
+Select Internet facing option. And select VPC that we have created. Select both availability zone us-east-1a and us-east-2b.  and select subnet pub-sub-1a and pub-sub2b. select security group ALB-backend-sg that we created for ALB-backend. And in the listner part select TG that we just created ALB-backend-TG.Scroll down as click on the Created Load balancer button 
+
+
+Now we have two load balancers, ALB-frontend and ALB-backend. But we need to add one more listener in ALB-backend. So click on ALB-backend.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/4cd5862e-0a4e-4e97-9fde-1d8053064174)
+
+selcet ALB-Backend and Click on add listener the button that is located on the right side.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/d9d7e3c8-9c37-42df-beb7-b102dcfdfbfc)
+Here In listener details select HTTPS. Default Action should be Forward and select ALB-backend-TG. Now we need to select the certificate that we have created. So in the Secure Listener setting select the certificate.  And click on the add button below.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/55177ec3-2202-461f-95ed-c1a73183c2c5)
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/6745c531-5520-42f5-9d9f-6a8c98b9edde)
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/7ad6a961-c123-403c-9214-89888b82f1db)
+
+here is my wildcard ssl which i have imported on aws 
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/99a3580a-091e-4213-ab9c-b3bef2e72732)
+
+## I hope that you have also completed these step
+
+## EC2
+Now we are going to create a temporary frontend and backend server to do all the required setup, take snapshots and create Machine images from it. So that we can utilize it in the launch template. It is a long process so bear with me.
+First, click on the instance button and then click on the Launch Instance button on the top right corner.
+First, we are going to set up a frontend server. Give a name to your instance (temp-frontend-server). Select Ubuntu as the operating system. Choose the instance type as t2.micro.  click on Create key pair if you don’t have it.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/4fbed5b0-a3a5-47be-8315-4e9ad067cc4b)
+If you are creating key pair make sure you select .PEM file format as I have shown in the below image. Because we are going to use  to do the ssh  and give any name to your key. And save it somewhere safe location on your computer
+
+Here we are doing a temporary setup so we don’t use our OWN VPC. we can use the default VPC given by AWS. In short, keep the Network setting as it is. In the firewall setting select all the fields as I shown in the below image to keep things simple. And lastly, click on the Advance details option.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/366d0f99-bebf-4d7d-837b-f66488de4a55)
+
+Scroll down to the bottom of the page, here we can see one text box with the name USER DATA. Here in this text box, you can write your bash script file and that will be executed during the launch of the instance. I have given the bash script below. so please copy that script and paste it here. And lastly, click on the launch instance button.
+you can use userdatata.sh code ..
+
+we have successfully launched temp-frontend-server. so now let’s launch a temporary backend server.  give a name to your instance (temp-backend-server).  select ubuntu as the operating system. And select t2.mirco as instance type. Here we don’t have to create a new key, we can utilize the previous key that we have created while launching the frontend instance.
+Scroll down to the bottom of the page, and copy the bash script that I have given backuserd.sh . and paste it in the USER-DATA text box. This bash scripting installs some packages so that we don’t have to install them manually. And click on the launch instance.
+
+Please wait for 5-8 minutes so that the instance comes in a running state. and then we will utilize instances for further steps.
+Select temp-frontend-server. and copy the IP address of the instance. Now open the Terminal where you have downloaded your YOUR_KEY.pem file. And type the command.
+ssh -i <name_of_key>.pem ubuntu@<Public_IP_add_of_Instance> like
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/1eb8c88d-f665-44f6-a13f-0268d32146a3)
+Now you are successfully logged your remote temp-frontend-server. now our first task is to clone my git repo. If you are working on your own project then clone your repo. So type the command in the terminal.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
