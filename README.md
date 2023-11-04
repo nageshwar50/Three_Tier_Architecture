@@ -202,6 +202,7 @@ Please wait for 5-8 minutes so that the instance comes in a running state. and t
 Select temp-frontend-server. and copy the IP address of the instance. Now open the Terminal where you have downloaded your YOUR_KEY.pem file. And type the command.
 ssh -i <name_of_key>.pem ubuntu@<Public_IP_add_of_Instance> like
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/1eb8c88d-f665-44f6-a13f-0268d32146a3)
+
 Now you are successfully logged your remote temp-frontend-server. now our first task is to clone my git repo. If you are working on your own project then clone your repo. So type the command in the terminal.
 
 
