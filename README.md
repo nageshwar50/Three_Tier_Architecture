@@ -60,7 +60,9 @@ Before we move ahead I want to change the settings of VPC and two public subnets
 Please go to the subnet page and select the public subnet and click on the action button and then choose the Edit subnet setting button from the drop-down list.
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/828face9-2ccf-434a-afec-2ed022393fa0)
 Here you have to mark right on Enable public assign public IPV4 address. And then click on the save button.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/473b5afe-e3a5-4428-a11f-774b2ead769c)
+
 And here we are done with VPC configuration in the primary region. In my case us-east-1 (N.Virginia). I hope you did the setup. Now let’s move ahead...
 
 ## Security Groups (SG)
