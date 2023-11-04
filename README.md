@@ -63,30 +63,33 @@ Here you have to mark right on Enable public assign public IPV4 address. And the
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/473b5afe-e3a5-4428-a11f-774b2ead769c)
 And here we are done with VPC configuration in the primary region. In my case us-east-1 (N.Virginia). I hope you did the setup. Now let’s move ahead...
 
-##  Security Groups (SG)
+## Security Groups (SG)
 
 Security groups are very essential part of the infrastructure. Because it can secure the resources in the cloud. SGs are a kind of firewall that allow or block incoming and outgoing traffic. SGs are applied to the resources like ALB, ec2, rds, etc. One resource can have more than one SG.
 So let's first understand. How SG will be used in our architecture and how we are going to apply that. Please see the below image you will get all the ideas. Which resource depends on what. And what are the port numbers we need to allow etc..
-
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/09dfea5b-d623-4509-abd0-f2ad11e4b9a2)
 
 To create SG, click on the security groups tab on the left panel and here you will see the Security Groups button. Note that SGs are specific with VPC. So we can’t use SG which is created in a different VPC. So when you create SG please make sure that you choose the right VPC. click on the crate security button on the top right corner. We will create our first SG for bastion-jump-server. Give any name and description you want but please remove the default VPC  and add VPC that we have just created. Then click on the Add rule button in inbound rules. And add SSH rule and add your IP in the destination. Please don’t do anything with the outbound rule if you don't have a good understanding. And then click on the create security group button.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/63bd2da1-83f6-4a74-a599-d857be046cad)
 Now let's create SG for the ALB-frontend. Again steps are similar but add the rule HTTP AND HTTPS from anywhere on the internet because both ALB are internet facing. But please select the right VPC
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/88c83be0-ed10-40ad-a8f3-f9c66c3e5119)
 
 Create SG for ALB-backend. ALB-backend is also internet-facing. Again allow HTTP and HTTPS from anywhere.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/3fcccd86-8091-48be-be90-1c922ca70a67)
 create SG for frontend servers. Our fronend server will be in a private subnet so add the HTTP rule and select the source as ALB-frontend-sg.  So only ALB-frontend can access the frontend server on port 80. You have to add one more rule SSH allows from bastion-jump-server-sg. So that the bastion host can log in to web servers.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/80c38ebf-0281-40f7-9fd0-2df03caf5214)
 
 Let's create SG for the backend server. Again steps are completely similar to frontend-sg. You have to allow port 80 from ALB-backend-sg so that only ALB-backend can request to the backend server and add the rule SSH allows from bastion-jump-server-sg. So that the bastion host can log in to backend servers.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9b50fc82-d056-4548-9ba1-01c7cba8bb91)
 
 Lastly, we are going to create SG for RDS instance. Allow port 3306 MySql/Arrora from backend-sg so that only the backend server will be able to access it. and no one else can access our database.
 
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/afdbf380-fad7-4304-9a26-307c7ccbb8f9)
-And here our SG setups are complete now..
+And here our SG setups are complete now.
 
 ##  RDS
 Now we are going to set up a database for our application. And for that, we are going to utilize the RDS service of AWS. So let's head over to the RDS dashboard. Just search RDS in the AWS console. 
