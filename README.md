@@ -103,32 +103,42 @@ And here our SG setups are complete now.
 ##  RDS
 Now we are going to set up a database for our application. And for that, we are going to utilize the RDS service of AWS. So let's head over to the RDS dashboard. Just search RDS in the AWS console. 
 Now first we need to set up a subnet group. It specifies in which subnet and Availability zone out database instance will be created. So click on the subnet group button on the left panel. And click on the button Create database subnet group which is in the middle of the web page.
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/5c302ed1-3396-4cf5-9cd0-940514d945ac)
+![Screenshot from 2023-11-04 12-33-13](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/033985ad-39ef-4976-b7d2-fa95b91e5f21)
+
 Here we can configure our VPC, subnet, and availability zone.  Give any name to your subnet but make sure you select the correct VPC. and select Azs us-east-1a and us-east-2b. According to the architecture that I have shown you, our database will be in private subnet  prvtsub-7a and prvtsub-8b. so please select as I have shown in the below figure. And then click on the create button.
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/a4c1ac10-5da1-4f26-8644-21a2ca4bc247)
+![Screenshot from 2023-11-04 12-34-40](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/8a5b1caf-e23e-477d-ae51-9a38e64e6457)
+![Screenshot from 2023-11-04 12-35-08](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/0e021075-df38-43d1-86bf-1660a2db4970)
+
+
 we are going to create a database. So click on the database button on the left panel and then click on the created database button.
 On this page, we can configure our database. Select standard create because I’m going to show you each and every step.  select MySQL in the engine option because our application runs on MySQL database. If your app runs on other engines you can select that one. Furthermore, you can select the engine version my application is compatible with MySQL version. But you can select according to the developer guild.
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/69d37777-dc93-41cd-b9d2-8e6a1b299b1e)
+![Screenshot from 2023-11-04 12-36-43](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/b970339c-ae3c-4c4b-87f6-36d57946778e)
+
 
 Scroll down, and select Dev/test as  template. If you select the free tier then you won’t be able to deploy RDS in a multi-availability zone.  Select Multi-AZ DB instance from availability and durability option. In settings give any name to your database.  In the credential setting give the username of the database in the Master username field and give the password in the Master password field. And then confirm the password below. Please do remember your username and password.
 
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9ce96469-8a64-4ad8-9c68-e472c79802d0)
+![Screenshot from 2023-11-04 12-38-21](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/dba33b2e-2f71-44eb-80a1-0d5a3aa0a6cc)
+
 
 Again scroll down, select Brustable class in the instance setting and select the instance type. Actually, it depends on your application uses. But for learning purposes, I am selecting t3.micro.  now in storage type select General purpose(GP2) and allocate 20 GiB for database. Please uncheck the auto-scaling option to keep our costs low.  And In the connectivity option please select the option according below screenshot.
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/02d1975e-e299-46cb-a658-7cda8c42da42)
+![Screenshot from 2023-11-04 12-39-45](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/8d5d92df-2429-44ac-b40e-bf89099dd736)
+
 In VPC, select VPC that we created earlier and in DB subnet group select the group that we just created, In the public access option please select No, choose existing security, and select security group rds-sg.
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/df02c925-1e55-4e92-b032-709834545c13)
+![Screenshot from 2023-11-04 12-46-10](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/40780e7d-a5d0-4664-8c64-f081f1025f0e)
+
 Scroll down, click on Additional Configuration, and in the database option give the name test because we need a database with the name of the test in the application.  Enable Automated Backup. Note: you have to enable automated backup otherwise you won’t be able to create a read replica of the RDS instance
 Scroll down, mark on enable encryption checkbox to make the database bit more secure, and click on Create database button below.
 
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/3f552b61-dc2f-437a-b85a-221ef13fc6fc)
+![Screenshot from 2023-11-04 12-47-23](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/a388d20e-64da-433b-8338-36242006c3ca)
 
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9200ac99-06e3-4ad7-af75-ba296632b1dd)
+![Screenshot from 2023-11-04 12-48-11](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/b6861d23-0e38-4ae5-93e2-ec7848889381)
+
 
 ## Note:
 RDS take 15-20 minute because it creates a database and then take a snapshot. So please have patience and wait for it to be ready
 After your database is completely ready and you see the status Available then select the database and click on the Action button. There you can see the drop-down list. Please click on created read-replica.
-![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/08afcf70-ae5f-4565-8d49-fc0628f96c47)
+![Screenshot from 2023-11-04 13-02-08](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9ed407f5-df5e-4331-8ae6-8e7eb18fb36f)
+
 
 This page is similar to creating a database. In the AWS region select the region where you want to create the read replica. In my case, It is Oregon (us-west-2).  Give a name to your read replica, and select all the necessary configurations that we did before while creating the database. For your reference, I have shown everything in the below images.
 
