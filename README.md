@@ -315,6 +315,114 @@ Give a name to your launch template (template-backend-server). Give version 1 in
 We have created two launch templates, template-frontend-server and template-backend-server
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/dd34d9b8-bd79-4694-9cc0-18da39f4a75d)
 
+## Auto scaling group (ASG)
+The auto-scaling group is the functionality of EC2 service that launches instances depending on your network traffic or CPU utilization or parameter that you set. It launches instances from the launch template.
+Note: we need to set up an Auto Scaling group 
+Give a name to your ASG. E.g  ASG-frontend . And select the launch template that we have created for frontend (e.g template-frontend-server ) in the launch template field. And click on the next button.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/c43e3582-da09-4e2b-bf2c-c7ed08fa4e55)
+In the network field, you have to choose VPC that we created earlier.  And in AZs and subnet filed choose pri-sub-3a and pri-sub-4b. these subnets we have created for frontend servers. And click on the next button
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/af3d08d4-83a1-4dd3-abd3-2172a49cb855)
+
+On this page we need to attach ASG with ALB so select the Attach existing ALB option and select  TG that we have created for frontend e.g  ALB-frontend-TG. And then scroll down and click on the NEXT button.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/be8e2c5b-ea9a-4eec-a86a-14fa840422ef)
+
+Here you can set the capacity and scaling policy but I’m keeping 1,1,1 to save cost but in real projects, it depends on the traffic.  Click on the NEXT->next->next-> and create ASG button.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/0402414a-f8f3-42d0-a7c8-d74262d7b634)
+Let's set up ASG for the backend
+Give a name to your ASG. E.g ASG-backend. And select the launch template that we have created for the backend (e.g template-backend-server ) in the launch template field. And click on the next button.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/5a6fe405-19e3-4ddf-b4d7-32430c1fede5)
+
+In the network field, you have to choose VPC that we created earlier.  And in AZ and subnet field choose pri-sub-5a and pri-sub-6b. these subnets we have created for backend servers. And click on the next button.
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/8b31ddf4-c2bf-44fe-b048-81ef09a45dcb)
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/58cdb54d-3a84-40bc-a360-da6967d95d88)
+Here you can set the capacity and scaling policy but I’m keeping 1,1,1 to save cost but in real projects, it depends on the traffic.  Click on the NEXT->next->next-> and create ASG button.
+Now, We have two ASGs, ASG-frontend will launch frontend servers and ASG-backend will launch backend servers. we have successfully set up ASG 
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/d21cdfb6-9288-4e1d-ae75-26917ad1deea)
+
+I hope you successfully completed the given step.
+
+Now before we go further one more thing we need to do. We need to initialize our database and need to create some tables. But we can’t access the RDS instance or backend server directly coz they are in a private subnet and the security group won’t let us login into it. So we need to launch an instance in the same VPC but in the public subnet that instance is called bastion host or jump-server. And through that instance, we will log in to the backend server, and from the backend server we will initialize our database.
+Click on the instance button on the left panel and click on the launch instance button in the top right corner. Please terminate those temp-servers if you haven't
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/481b49d3-8004-4100-a65d-bb3bfcf992d9)
+
+Launch a instance and give  name to the instance (bastion-jump-server). Select Ubuntu as OS, instance typet2.micro, and select Key pair. In all the instance and launch template we have used only one key so it will be easy to login in any instance. And then click on the Edit button of the Network setting.
+In the network setting select VPC that we have created and in the subnet select pub-sub-1a, you can select any public subnet from the VPC. and then select security group. We already have a security group with the name bastion-jump-server-sg and click on the launch instance.
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/adce1991-68d2-415e-953e-e5122fbd715d)
+Once the instance becomes healthy, we can SSH into it. so select the instance and copy its public IP
+Run this command
+
+scp -i <name_of_your_key>.pem <name_of_your_key>.pem ubuntu@<Public_IP_add_of_instance>:/home/ubuntu/key.pem
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/5a2e8c62-42ef-4c4b-93bd-5646855a06c3)
+
+The above command will copy our login secret key file into the bastion host.
+
+Now type the below command to login into the Bastion host. And copy the public IP of the Bastion hos
+ssh -i <name_of_your_key>.pem ubuntu@<Public_IP_add_of_instance>
+Hit the below command to change the permission of the key.pem file
+
+chmod 400 key.pem
+
+Now we want login into the backend server so select backend server and copy its private IP address. You can identify the backend server by the security group attached to the instance.
+
+Type the below command to log in to the backend server.
+
+ssh -i key.pem ubuntu@<Private_IP_add_backend_server>
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/96e11ddb-2e4c-4f45-b60e-1921f3169161)
+Now we are logged in inside the backend server.run this command
+ cd Three-tier_code/backend/
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/ed3a2d21-27e8-4384-9bab-6d45ae51ff79)
+We need to install one package type below the command
+
+sudo apt install mysql-server -y
+And type the below command to initialize the database.
+
+mysql -h book.rds.com -u <user_name_of_rds> -p<password_of_rds> test < test.db
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
