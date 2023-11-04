@@ -382,10 +382,16 @@ We need to install one package type below the command
 sudo apt install mysql-server -y
 And type the below command to initialize the database.
 
-mysql -h book.rds.com -u <user_name_of_rds> -p<password_of_rds> test < test.db
+mysql -h book.rds.com -u <user_name_of_rds> -p<password_of_rds> test < test.sql
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/89d398a4-cb25-4361-b07e-a36f33edd18e)
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/4eb6aca3-d294-46c0-8232-d593131e3479)
 
 
 
+copy your fronted load blancer hit on browser 
+
+![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/eefa6602-390e-4b46-8248-d4e2b719327a)
 
 
 
