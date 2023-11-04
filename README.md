@@ -73,6 +73,7 @@ So let's first understand. How SG will be used in our architecture and how we ar
 To create SG, click on the security groups tab on the left panel and here you will see the Security Groups button. Note that SGs are specific with VPC. So we can’t use SG which is created in a different VPC. So when you create SG please make sure that you choose the right VPC. click on the crate security button on the top right corner. We will create our first SG for bastion-jump-server. Give any name and description you want but please remove the default VPC  and add VPC that we have just created. Then click on the Add rule button in inbound rules. And add SSH rule and add your IP in the destination. Please don’t do anything with the outbound rule if you don't have a good understanding. And then click on the create security group button.
 
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/63bd2da1-83f6-4a74-a599-d857be046cad)
+
 Now let's create SG for the ALB-frontend. Again steps are similar but add the rule HTTP AND HTTPS from anywhere on the internet because both ALB are internet facing. But please select the right VPC
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/88c83be0-ed10-40ad-a8f3-f9c66c3e5119)
 
@@ -112,7 +113,9 @@ In VPC, select VPC that we created earlier and in DB subnet group select the gro
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/df02c925-1e55-4e92-b032-709834545c13)
 Scroll down, click on Additional Configuration, and in the database option give the name test because we need a database with the name of the test in the application.  Enable Automated Backup. Note: you have to enable automated backup otherwise you won’t be able to create a read replica of the RDS instance
 Scroll down, mark on enable encryption checkbox to make the database bit more secure, and click on Create database button below.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/3f552b61-dc2f-437a-b85a-221ef13fc6fc)
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/9200ac99-06e3-4ad7-af75-ba296632b1dd)
 
 ## Note:
@@ -122,20 +125,25 @@ After your database is completely ready and you see the status Available then se
 
 This page is similar to creating a database. In the AWS region select the region where you want to create the read replica. In my case, It is Oregon (us-west-2).  Give a name to your read replica, and select all the necessary configurations that we did before while creating the database. For your reference, I have shown everything in the below images.
 
-This page is similar to creating a database. In the AWS region select the region where you want to create the read replica. In my case, It is US East (N. Virginia) us-east-1.  Give a name to your read replica, and select all the necessary configurations that we did before while creating the database. For your reference, I have shown everything in the below images. You can check your read replica on the specified region’s RDS dashboard
+This page is similar to creating a database. In the AWS region select the region where you want to create the read replica. In my case, It is US East (N. Virginia) us-east-1.  Give a name to your read replica, and select all the necessary configurations that we did before while creating the database. For your reference, I have shown everything in the below images. You can check your read replica on the specified region’s RDS dashboard.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/2bd1fa75-2a1a-4c6d-bd39-4a1d7df42fcd)
+
 ## Note:
 we can’t write anything into a read replica. It is just read-only database. So when a disaster happens we just have to promote read replica so that it becomes the primary database in that region.
 
 
 ## Route 53
 Now we are going to utilize route 53 service and create two private hosted zone.  for north Virginia(us-east-1 Firstly, we are gonna create a hosted zone for us-east-1. Click on the Hosted Zones button on the left panel and click on the created hosted zone button on the top right corner.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/f569d641-1405-46b9-a012-db63ec036d00)
 
-Give any domain name because anyhow it will be private hosted zone but it would be great if you give the name same as mine (rds.com). Please select the private hosted zone and Select the region. In my case, it is us-east-1. And then select VPC ID. Make sure you select VPC that we created earlier. Because this hosted zone will resolve the record only in specified VPC.  and then click on the Create hosted zone
+Give any domain name because anyhow it will be private hosted zone but it would be great if you give the name same as mine (rds.com). Please select the private hosted zone and Select the region. In my case, it is us-east-1. And then select VPC ID. Make sure you select VPC that we created earlier. Because this hosted zone will resolve the record only in specified VPC.  and then click on the Create hosted zone.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/7a7c7e64-9319-44c3-8403-6767ec046712)
 
 Click on the defined record button in the middle of the box.Here type book in the record name field. In the record type select CNAME. In the value field paste endpoint of the RDS which is in us-east-1. Then click on the defined record button.After successfully completing the above steps your Route 53 console look like this.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/403945c5-acaf-42ed-acb8-fc0195536c29)
 
 
@@ -150,8 +158,11 @@ Now it’s time to set up an Application load balancer. We need two load balance
 Note: before we created ALB we need to create a Target group(TG). So first we will create TG for ALB-frontend and then create TG for ALB-backend.
 
 Type ec2 in the AWS console. and click on the EC2 service.Click the target group button on the bottom of the left panel. And click on the create target group button in the middle of the page.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/b140963c-3ad0-4771-bbdb-2bbb57fa90d5)
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/432501f1-c36d-4db3-a0b3-20f619680915)
+
 Click on the create target group button.
 
 Let's create TG for ALB-backend. Click on the create target group button. Select the target type Instance. Again give some meaning full name such as ALB-backend-TG. Select VPC that we have created and after that we can see that we have two TG. ALB-frontend-TG and ALB-backend-TG.
