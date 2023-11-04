@@ -171,16 +171,23 @@ Select Internet facing option. And select VPC that we have created. Select both 
 
 
 Now we have two load balancers, ALB-frontend and ALB-backend. But we need to add one more listener in ALB-backend. So click on ALB-backend.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/4cd5862e-0a4e-4e97-9fde-1d8053064174)
 
 selcet ALB-Backend and Click on add listener the button that is located on the right side.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/d9d7e3c8-9c37-42df-beb7-b102dcfdfbfc)
+
 Here In listener details select HTTPS. Default Action should be Forward and select ALB-backend-TG. Now we need to select the certificate that we have created. So in the Secure Listener setting select the certificate.  And click on the add button below.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/55177ec3-2202-461f-95ed-c1a73183c2c5)
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/6745c531-5520-42f5-9d9f-6a8c98b9edde)
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/7ad6a961-c123-403c-9214-89888b82f1db)
 
-here is my wildcard ssl which i have imported on aws 
+here is my wildcard ssl which i have imported on aws.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/99a3580a-091e-4213-ab9c-b3bef2e72732)
 
 ## I hope that you have also completed these step
@@ -191,20 +198,23 @@ First, click on the instance button and then click on the Launch Instance button
 First, we are going to set up a frontend server. Give a name to your instance (temp-frontend-server). Select Ubuntu as the operating system. Choose the instance type as t2.micro.  click on Create key pair if you don’t have it.
 
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/4fbed5b0-a3a5-47be-8315-4e9ad067cc4b)
+
 If you are creating key pair make sure you select .PEM file format as I have shown in the below image. Because we are going to use  to do the ssh  and give any name to your key. And save it somewhere safe location on your computer
 
 Here we are doing a temporary setup so we don’t use our OWN VPC. we can use the default VPC given by AWS. In short, keep the Network setting as it is. In the firewall setting select all the fields as I shown in the below image to keep things simple. And lastly, click on the Advance details option.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/366d0f99-bebf-4d7d-837b-f66488de4a55)
 
 Scroll down to the bottom of the page, here we can see one text box with the name USER DATA. Here in this text box, you can write your bash script file and that will be executed during the launch of the instance. I have given the bash script below. so please copy that script and paste it here. And lastly, click on the launch instance button.
-you can use userdatata.sh code ..
+you can use userdatata.sh code.
 
 we have successfully launched temp-frontend-server. so now let’s launch a temporary backend server.  give a name to your instance (temp-backend-server).  select ubuntu as the operating system. And select t2.mirco as instance type. Here we don’t have to create a new key, we can utilize the previous key that we have created while launching the frontend instance.
 Scroll down to the bottom of the page, and copy the bash script that I have given backuserd.sh . and paste it in the USER-DATA text box. This bash scripting installs some packages so that we don’t have to install them manually. And click on the launch instance.
 
 Please wait for 5-8 minutes so that the instance comes in a running state. and then we will utilize instances for further steps.
 Select temp-frontend-server. and copy the IP address of the instance. Now open the Terminal where you have downloaded your YOUR_KEY.pem file. And type the command.
-ssh -i <name_of_key>.pem ubuntu@<Public_IP_add_of_Instance> like
+ssh -i <name_of_key>.pem ubuntu@<Public_IP_add_of_Instance> like.
+
 ![image](https://github.com/nageshwar50/Three_Tier_Architecture/assets/128671109/1eb8c88d-f665-44f6-a13f-0268d32146a3)
 
 Now you are successfully logged your remote temp-frontend-server. now our first task is to clone my git repo. If you are working on your own project then clone your repo. So type the command in the terminal.
